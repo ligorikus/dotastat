@@ -1,6 +1,8 @@
 package ligo.dota;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 import ligo.http.Json;
@@ -40,11 +42,16 @@ public class Match {
 	
 	public String getTeam(String team)
 	{
-		//TODO sort team
-		String result = "";
+		ArrayList<Integer> teamInt = new ArrayList<Integer>();
 		for(String hero : team.split(","))
 		{
-			result += "FF"+ String.format("%1$02X",Integer.parseInt(hero));
+			teamInt.add(Integer.parseInt(hero));
+		}
+		Collections.sort(teamInt);
+		String result = "";
+		for(Integer hero : teamInt)
+		{
+			result += "FF"+ String.format("%1$02X", hero);
 		}
 		return result;
 	}
