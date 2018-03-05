@@ -47,7 +47,7 @@ public class ParserForMatches {
 			
 			try {
 				Statement insertMatches = this.mysql.createStatement();
-				String sqlQueryInsertMatches = "insert into `matches` (`match_id`,`radiant_win`,`duration`,`avg_mmr`,`radiant_team`, `dire_team`) values";
+				String sqlQueryInsertMatches = "insert into `matches` (`id`,`radiant_win`,`duration`,`avg_mmr`,`start_time`) values";
 				for(Match match :matches)
 				{
 					sqlQueryInsertMatches += match.toString()+",";

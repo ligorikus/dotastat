@@ -54,6 +54,7 @@ public class Json {
 			String key = "";
 			String value = "";
 			boolean quotes = false;
+			boolean isArray = false;
 			
 			for(int i = 1; i < this.json_response.length(); i++)
 			{
@@ -62,6 +63,12 @@ public class Json {
 				//System.out.print(tempChar);
 				switch(tempChar)
 				{
+				case '[':
+					isArray = true;
+					break;
+				case ']':
+					isArray = false;
+					break;
 				case ':':
 					key_flag = false;
 					break;
@@ -71,14 +78,21 @@ public class Json {
 						value+=tempChar;
 						break;
 					}
+					if(isArray)
+					{
+						value+=tempChar;
+						break;
+					}
 					
 					Object valueObj = null;
 					
 					if(value.charAt(0) == '{' && value.charAt(value.length()-1) == '}')
 						valueObj = new Json(value).getJsonMap();
+					else if (value.charAt(0) == '[' && value.charAt(value.length()-1) == ']')
+						valueObj = new Json(value).getArray();
 					else
 						valueObj = new String(value);
-
+					
 					map.put(key, valueObj);
 					key = "";
 					value = "";
@@ -117,6 +131,8 @@ public class Json {
 					Object valueObj = null;
 					if(value.charAt(0) == '{' && value.charAt(value.length()-1) == '}')
 						valueObj = new Json(value).getJsonMap();
+					else if (value.charAt(0) == '[' && value.charAt(value.length()-1) == ']')
+						valueObj = new Json(value).getArray();
 					else
 						valueObj = new String(value);
 					map.put(key, valueObj);
