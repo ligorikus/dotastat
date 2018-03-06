@@ -1,36 +1,47 @@
 package ligo.dota;
 
 
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.Map;
+import java.util.Date;
 
 import ligo.http.Json;
 
 public class Match {
-	public String match_id = "";
+	public BigInteger match_id = null;
 	public Boolean radiant_win = null;
 	public Integer duration = null;
 	public String avg_mmr = "";
-	public String radiant_team = "";
-	public String dire_team = "";
+	public String start_time = null;
+	public ArrayList<Integer> radiant_team = null;
+	public ArrayList<Integer> dire_team = null;
 	
 	public Match(Json match_response)
 	{
 		Map<String, Object> match = match_response.getJsonMap();
 		
-		this.match_id = (String) match.get("match_id");
+		this.match_id = new BigInteger((String) match.get("match_id"));
 		this.radiant_win = Boolean.parseBoolean((String) match.get("radiant_win"));
-		this.duration = Integer.parseInt( (String) match.get("duration"));
+		this.duration = Integer.parseInt((String) match.get("duration"));
 		this.avg_mmr = (String) match.get("avg_mmr");
-		this.radiant_team = (String) match.get("radiant_team");	
-		this.dire_team = (String) match.get("dire_team");
+       
+		long startTime = Long.parseLong((String) match.get("start_time"))*1000L;
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis( startTime );
+		this.start_time = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(cal.getTime());
+		
+		this.radiant_team = getTeam((String) match.get("radiant_team"));	
+		this.dire_team = getTeam((String) match.get("dire_team"));
 	}
+	
 	
 	public String toString()
 	{
-		return "(\""+this.match_id+"\","+this.getRadiantWin()+","+this.duration+",\""+this.avg_mmr+"\",\"" +
-				this.getTeam(this.radiant_team)+"\",\""+this.getTeam(this.dire_team)+"\")";
+		return "("+this.match_id+","+this.getRadiantWin()+","+this.duration+",\""+this.avg_mmr+"\",\""+this.start_time+"\")";
 	}
 	
 	public int getRadiantWin()
@@ -40,19 +51,13 @@ public class Match {
 		return 0;
 	}
 	
-	public String getTeam(String team)
+	public ArrayList<Integer> getTeam(String team)
 	{
 		ArrayList<Integer> teamInt = new ArrayList<Integer>();
 		for(String hero : team.split(","))
 		{
 			teamInt.add(Integer.parseInt(hero));
 		}
-		Collections.sort(teamInt);
-		String result = "";
-		for(Integer hero : teamInt)
-		{
-			result += "FF"+ String.format("%1$02X", hero);
-		}
-		return result;
+		return teamInt;
 	}
 }

@@ -1,12 +1,11 @@
 package ligo.dota.parser;
 
-import java.sql.Connection;
+import java.sql.Connection; 
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 import ligo.dota.Hero;
-import ligo.dota.Match;
 import ligo.http.HttpConstructor;
 import ligo.http.Json;
 

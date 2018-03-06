@@ -2,6 +2,7 @@ package ligo;
 
 
 import java.io.*;
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -17,14 +18,14 @@ public class Main {
 	public static void main(String[] args) throws IOException, SQLException, InterruptedException {
 		
 		Connection mysql = new SQLConnection().connect();
-		ParserForHeroes heroes = new ParserForHeroes(mysql);
-		heroes.parse();
-/*		
-		String lastMatch = "3743286606";
-		ParserForMatches opendota = new ParserForMatches(1000, mysql, lastMatch);
+		/*ParserForHeroes heroes = new ParserForHeroes(mysql);
+		heroes.parse();*/
+
+		BigInteger lastMatch = new BigInteger("3759915805");
+		ParserForMatches opendota = new ParserForMatches(8000, mysql, lastMatch);
 		opendota.parse();
 		System.in.read();
-		System.out.println("operations: "+opendota.operations+", exceptions: "+opendota.exceptions);*/
+		System.out.println("operations: "+opendota.operations+", exceptions: "+opendota.exceptions);
 		mysql.close();
 	}
 } 	
